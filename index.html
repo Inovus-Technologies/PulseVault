@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Premium Market Analytics Dashboard for cryptocurrencies." />
+  <title>PulseVault — Premium Crypto Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="light-mode">
+  <div class="app-shell">
+      <div class="app-shell">
+    
+    <!-- Global Market Marquee -->
+    <div class="global-marquee">
+      <div class="marquee-content" id="globalMarquee">
+        <span>Loading global market data...</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <span>↗</span>
+        </div>
+        <div class="brand-text">
+          <h1>PulseVault</h1>
+          <p>Premium Crypto Market Analytics</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <label class="theme-toggle" for="themeSwitch" aria-label="Theme toggle">
+          <input type="checkbox" id="themeSwitch" />
+          <span class="toggle-track">
+            <span class="toggle-thumb">
+              <span class="toggle-icon sun">☀</span>
+              <span class="toggle-icon moon">☾</span>
+            </span>
+          </span>
+        </label>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">Live Market Snapshot</div>
+        <h2>Track the crypto market with a clean premium interface.</h2>
+        <p>
+          A polished, responsive dashboard tailored for real-time market analysis and portfolio tracking.
+        </p>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-label">Watchlist</span>
+          <strong id="watchlistCount">0 Assets</strong>
+        </div>
+      </div>
+    </section>
+        <!-- Portfolio Allocation Visualizer -->
+    <section class="portfolio-panel">
+      <div class="portfolio-left">
+        <h3>Total Balance</h3>
+        <strong class="total-balance" id="totalBalance">$0.00</strong>
+        <p>Real-time USD valuation</p>
+      </div>
+      <div class="portfolio-right">
+        <div class="donut-container">
+          <canvas id="portfolioChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Toolbar (Search & Sort) -->
+    <section class="controls-panel">
+      <div class="search-box">
+        <div class="input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search & add coin (e.g., btc, cardano, doge)..." 
+            autocomplete="off" 
+          />
+        </div>
+        <div class="search-dropdown" id="searchDropdown" hidden></div>
+      </div>
+
+      <div class="sort-box">
+        <label for="sortSelect">Sort By:</label>
+        <select id="sortSelect" class="sort-select">
+          <option value="market_cap_desc">Market Cap (High → Low)</option>
+          <option value="price_desc">Price (High → Low)</option>
+          <option value="price_asc">Price (Low → High)</option>
+          <option value="change_desc">Top Gainers (24h)</option>
+          <option value="change_asc">Top Losers (24h)</option>
+          <option value="volume_desc">24h Volume</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Dynamic Dashboard Grid -->
+    <main class="dashboard" id="dashboardGrid">
+      <!-- Cards rendered dynamically via script.js -->
+    </main>
+
+    <!-- Loading / Error -->
+    <section class="status-panel" id="statusPanel" aria-live="polite">
+      <p id="statusMessage">Loading live market data...</p>
+    </section>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+    <!-- Modal Overlay for Deep Asset Analytics -->
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <div class="modal-content" id="modalContent">
+        <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">×</button>
+        
+        <div class="modal-header">
+          <img id="modalCoinLogo" src="" alt="" />
+          <div>
+            <h2 id="modalCoinName">--</h2>
+            <p id="modalCoinSymbol">--</p>
+          </div>
+          <span class="rank-badge" id="modalCoinRank">Rank #--</span>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-price-block">
+                      <!-- NEW: Historical Deep Chart -->
+          <div class="modal-chart-container">
+            <div class="timeframe-selector" id="timeframeSelector">
+              <button class="tf-btn" data-days="1">1D</button>
+              <button class="tf-btn active" data-days="7">7D</button>
+              <button class="tf-btn" data-days="30">1M</button>
+              <button class="tf-btn" data-days="365">1Y</button>
+            </div>
+            <div class="deep-chart-wrapper">
+              <canvas id="modalDeepChart"></canvas>
+            </div>
+          </div>
+            <div>
+              <span class="label">Current Price</span>
+              <strong class="price" id="modalCoinPrice">$--</strong>
+            </div>
+            <div style="text-align: right;">
+              <span class="label">24h Change</span>
+              <strong class="change" id="modalCoinChange">--</strong>
+            </div>
+          </div>
+
+          <!-- 24h High / Low Bar -->
+          <div class="range-container">
+            <div class="range-labels">
+              <span>24h Low: <strong id="modalLow24h">$--</strong></span>
+              <span>24h High: <strong id="modalHigh24h">$--</strong></span>
+            </div>
+            <div class="range-bar-track">
+              <div class="range-bar-fill" id="modalRangeFill"></div>
+            </div>
+          </div>
+
+          <div class="modal-grid">
+            <div class="modal-stat">
+              <span class="label">All-Time High (ATH)</span>
+              <strong id="modalAth">$--</strong>
+              <small id="modalAthChange" class="change">--</small>
+            </div>
+            <div class="modal-stat">
+              <span class="label">Circulating Supply</span>
+              <strong id="modalSupply">--</strong>
+            </div>
+            <div class="modal-stat">
+              <span class="label">Market Cap</span>
+              <strong id="modalMcap">$--</strong>
+            </div>
+            <div class="modal-stat">
+              <span class="label">24h Volume</span>
+              <strong id="modalVol">$--</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</html>
